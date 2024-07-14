@@ -221,88 +221,88 @@ footer a {
         <div id="left-column"></div>
         <div id="right-column"></div>
     </div>
-   <script>
-    const payload = {
-        'username': 'admins',
-        'password': 'passwordpassword'
-    };
-
-    // First, send POST request
-    fetch('https://f.premiumbynd.workers.dev/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json(); // Parse response as JSON
-    })
-    .then(responseData => {
-        // Assuming responseData contains the token
-        const token = responseData.token;
-
-        // Now, use the token to send a GET request
-        return fetch('https://api.premiumbynd.workers.dev/', {
-            method: 'GET',
+  <script>
+        const payload = {
+            'username': 'admins',
+            'password': 'passwordpassword'
+        };
+    
+        // First, send POST request
+        fetch('https://f.premiumbynd.workers.dev/', {
+            method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(HTTP error! Status: ${response.status});
             }
+            return response.text(); // Get the response as plain text
+        })
+        .then(token => {
+
+
+            console.log(token);
+            // Now, use the token to send a GET request
+            return fetch('https://api.premiumbynd.workers.dev/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': Bearer ${token},
+                    'Content-Type': 'application/json'
+                }
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(HTTP error! Status: ${response.status});
+            }
+            return response.json();
+        })
+        .then(data => {
+            const leftColumn = document.getElementById('left-column');
+            const rightColumn = document.getElementById('right-column');
+            const halfwayIndex = Math.ceil(data.length / 2);
+    
+            data.forEach((match, index) => {
+                // Create elements for match details
+                const matchDiv = document.createElement('div');
+                matchDiv.classList.add('match-container');
+                matchDiv.innerHTML = 
+                    <div class="match-title">
+                        <span class="tournament">Tournament: ${match.tournament}</span><br>
+                        <span class="teams">Teams: ${match.match}</span>
+                    </div>
+                    <div class="button-container">
+                        <button onclick="playStream('${match.id}', false)">WATCH</button>
+                        <button onclick="playStream('${match.id}', true)">WORLDWIDE</button>
+                    </div>
+                    <div class="match-details">
+                        <p>Date & Time: ${match.datetime}</p>
+                    </div>
+                ;
+    
+                // Append match container to appropriate column
+                if (index < halfwayIndex) {
+                    leftColumn.appendChild(matchDiv);
+                } else {
+                    rightColumn.appendChild(matchDiv);
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            alert(Error fetching data: ${error.message});
         });
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+    
+        // Function to play stream
+        function playStream(matchId, worldwide = false) {
+            const baseUrl = '/api.html?match_id=' + matchId;
+            const finalUrl = worldwide ? baseUrl + '&worldwide=true' : baseUrl;
+            window.location.href = finalUrl;
         }
-        return response.json();
-    })
-    .then(data => {
-        const leftColumn = document.getElementById('left-column');
-        const rightColumn = document.getElementById('right-column');
-        const halfwayIndex = Math.ceil(data.length / 2);
-
-        data.forEach((match, index) => {
-            // Create elements for match details
-            const matchDiv = document.createElement('div');
-            matchDiv.classList.add('match-container');
-            matchDiv.innerHTML = `
-                <div class="match-title">
-                    <span class="tournament">Tournament: ${match.tournament}</span><br>
-                    <span class="teams">Teams: ${match.match}</span>
-                </div>
-                <div class="button-container">
-                    <button onclick="playStream('${match.id}', false)">WATCH</button>
-                    <button onclick="playStream('${match.id}', true)">WORLDWIDE</button>
-                </div>
-                <div class="match-details">
-                    <p>Date & Time: ${match.datetime}</p>
-                </div>
-            `;
-
-            // Append match container to appropriate column
-            if (index < halfwayIndex) {
-                leftColumn.appendChild(matchDiv);
-            } else {
-                rightColumn.appendChild(matchDiv);
-            }
-        });
-    })
-    .catch(error => {
-        console.error('Error fetching data:', error);
-        alert(`Error fetching data: ${error.message}`);
-    });
-
-    // Function to play stream (example)
-    function playStream(matchId, worldwide = false) {
-        const baseUrl = '/api.html?match_id=' + matchId;
-        const finalUrl = worldwide ? baseUrl + '&worldwide=true' : baseUrl;
-        window.location.href = finalUrl;
-    }
-</script>
+    </script>
 
     
 

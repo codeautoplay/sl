@@ -1,9 +1,0 @@
-{
-  "subsData": {
-    "subscriptionStatus": "ACTIVE",
-    "autopay": true,
-    "subscriptionType": "PREMIUM",
-    "expiryDate": "2030-07-31T04:29:01+05:30",
-    "renewEnabled": true
-  }
-}
